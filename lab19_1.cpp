@@ -20,7 +20,7 @@ string toUpperStr(string x){
     return y;
 }
 
-void importDataFromFile(string filename,vector<string> names, vector<int> scores, vector<char> grades){
+void importDataFromFile(string filename,vector<string> &names, vector<int> &scores, vector<char> &grades){
     ifstream data;
     data.open(filename);
     char format[] = "%[^:] : %d %d %d";
@@ -54,23 +54,33 @@ void getCommand(string &command,string &key){
 
 
 void searchName(vector<string> names, vector<int> scores, vector<char> grades,string key){
-    int index;
-    for(int i = 0; i < names.size(); i++){
-        if(names[i] == key){
+    int index = -1;
+    
+    for(unsigned i = 0; i < names.size(); i++){
+        if(toUpperStr(names[i]) == key){
+
             index = i;
         }
     }
-    cout << "---------------------------------\n";
-    cout << names[index] << "'s score = " << scores[index];                      
-    cout << names[index] << "'s grade = " << grades[index];                      
-    cout << "\n---------------------------------\n";
+    if (index != -1){
+        cout << "---------------------------------\n";
+        cout << names[index] << "'s score = " << scores[index]<< "\n";                      
+        cout << names[index] << "'s grade = " << grades[index];                      
+        cout << "\n---------------------------------\n";
+    }
+    else {
+        cout << "---------------------------------\n";
+        cout << "Cannot found.";
+        cout << "\n---------------------------------\n";
+    }
+    
     
 }
 
 void searchGrade(vector<string> names, vector<int> scores, vector<char> grades,string key){
     cout << "---------------------------------\n";
     char k = key[0];
-    for(int i = 0; i < names.size() ; i++ ){
+    for(unsigned i = 0; i < names.size() ; i++ ){
         if(grades[i] == k) cout << names[i] << " (" << scores[i] << ")" << endl; 
     }
     cout << "---------------------------------\n";
@@ -89,7 +99,6 @@ int main(){
         getCommand(command,key);
         command = toUpperStr(command);
         key = toUpperStr(key);
-        cout << "\n" << command << " \n" << key ; 
         if(command == "EXIT") break;
         else if(command == "GRADE") searchGrade(names, scores, grades, key);
         else if(command == "NAME") searchName(names, scores, grades, key);
